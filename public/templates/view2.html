@@ -1,0 +1,7 @@
+Search: <input type="text" ng-model="search" />
+
+<br>
+<h3>Looping through an array with ng-repeat directive</h3>
+<ul>
+  <li ng-repeat="pers in friends | filter:search | orderBy:'orders'">{{ pers.name }} - {{ pers.city }} - {{ pers.orders }}<button data-ng-click="deleteFriend(pers.name)">X</button></li>
+</ul>

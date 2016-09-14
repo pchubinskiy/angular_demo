@@ -1,11 +1,114 @@
 <!DOCTYPE html>
-<html>
+<html ng-app="demoApp">
   <head>
     <title><%= title %></title>
     <link rel='stylesheet' href='/stylesheets/style.css' />
   </head>
   <body>
-    <h1><%= title %></h1>
-    <p>Welcome to <%= title %></p>
+ <!--    <h1><%= title %></h1>
+    <p>Welcome to <%= title %></p> -->
+
+    <!-- <div ng-controller="SimpleController">
+      Search: <input type="text" ng-model="search" />
+
+      <br>
+      <h3>Looping through an array with ng-repeat directive</h3>
+      <ul>
+        <li ng-repeat="pers in friends | filter:search | orderBy:'city'">{{ pers.name }} - {{ pers.city }}</li>
+      </ul>
+    </div> -->
+
+    <div style="margin-bottom: 25px;">
+      Views from the:
+      <a href="#/view1">view 1</a>
+      <a href="#/view2">view 2</a>
+    </div>
+
+    <div data-ng-view></div>
+
+    <script src="/javascripts/angular.min.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular-route.js"></script>
+
+    <script>
+        var demoApp = angular.module('demoApp', ['ngRoute']);
+
+        demoApp.config(function ($routeProvider) {
+            $routeProvider
+                .when('/view1',
+                    {
+                      controller: 'SimpleController',
+                      templateUrl: 'templates/view1.html'
+                    })
+                .when('/view2',
+                    {
+                      controller: 'SimpleController',
+                      templateUrl: 'templates/view2.html'
+                    })
+                .otherwise({ redirectTo: '/view1' });
+        });
+
+        demoApp.factory('simpleFactory', function() {
+            var friends = [
+                  {name:'Akash',city:'Austin',orders:'3'},
+                  {name:'Vaughn',city:'Houston',orders:'5'},
+                  {name:'Shelby',city:'San Antonio',orders:'7'},
+                  {name:'Alisha',city:'D.C.',orders:'7'}
+            ];
+
+            var factory = {};
+            factory.getFriends = function () {
+                return friends;
+            };
+            factory.postFriends = function (friend) {
+
+            };
+
+            return factory;
+        });
+
+        // function SimpleController($scope) {
+        //     $scope.friends = [
+        //         {name:'Akash',city:'Austin'},
+        //         {name:'Vaughn',city:'Houston'},
+        //         {name:'Shelby',city:'San Antonio'},
+        //         {name:'Alisha',city:'D.C.'}
+        //     ];
+        // }
+        // demoApp.controller('SimpleController', SimpleController);
+
+        var controllers = {};
+        controllers.SimpleController = function ($scope, simpleFactory) {
+          $scope.friends = [];
+
+          init();
+
+          function init() {
+              $scope.friends = simpleFactory.getFriends();
+          }
+
+          // $scope.friends = [
+          //         {name:'Akash',city:'Austin'},
+          //         {name:'Vaughn',city:'Houston'},
+          //         {name:'Shelby',city:'San Antonio'},
+          //         {name:'Alisha',city:'D.C.'}
+          // ];
+
+          $scope.addFriend = function() {
+            $scope.friends.push(
+                {
+                    name: $scope.newFriend.name,
+                    city: $scope.newFriend.city
+                });
+          };
+
+          $scope.deleteFriend = function (item) {
+            var index = $scope.friends.indexOf(item);
+            $scope.friends.splice(index, 1);
+          };
+
+        }
+
+        demoApp.controller(controllers);
+    </script>
   </body>
 </html>
